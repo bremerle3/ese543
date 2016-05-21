@@ -1,0 +1,52 @@
+244c244,245
+< legend('I+Lu','Location','Best');
+---
+> RDu_min = min(min(abs(RDu_lqr)));
+> legend([num2str(jj) ' min(I+Lu) = ' num2str(RDu_min)],'Location','Best');
+252c253,254
+< legend('I+invLu','Location','Best');
+---
+> SRu_min = min(min(abs(SRu_lqr)));
+> legend([num2str(jj) ' min(I+invLu) = ' num2str(SRu_min)],'Location','Best');
+258d259
+< 
+280a282,320
+> % Return Difference at plant output
+> sv_rd_y = sigma(sys_y,w,2);
+> min_sv_rd_y = sv_rd_y(nCp,:);
+> min_rd_y = min(abs(min_sv_rd_y));
+> 
+> figure('Name','min SV of RDM at Plant Output'),
+> semilogx(w,20*log10(abs(min_sv_rd_y)),'k','LineWidth',2);grid
+> legend(['min(sv(I+Ly)) = ' num2str(min_rd_y)],'Location','Best');
+> xlabel('Frequency (rps)')
+> ylabel('Mag dB')
+> title('Stability Robustness at Plant Input')
+> if(save_plots == 1) saveppt2(plot_file_name); end
+> 
+> disp('Classical Margins')
+> allmargin(sys_u)
+> 
+> disp('  ')
+> disp('SV Margins')
+> RDu_nGM = 1/(1+RDu_min);
+> RDu_pGM = 1/(1-RDu_min);
+> RDu_Pha = 2*asin(RDu_min/2);
+> RDu_nGM_dB = 20*log10(RDu_nGM);
+> RDu_pGM_dB = 20*log10(RDu_pGM);
+> RDu_Pha_deg = 180*RDu_Pha/pi ;
+> disp('RDu_nGM RDu_pGM RDu_Pha')
+> disp([num2str(RDu_nGM) ' ' num2str(RDu_pGM) ' ' num2str(RDu_Pha)])
+> disp([num2str(RDu_nGM_dB) ' ' num2str(RDu_pGM_dB) ' ' num2str(RDu_Pha_deg)])
+> SRu_nGM = 1-SRu_min;
+> SRu_pGM = 1+SRu_min;
+> SRu_Pha = 2*asin(SRu_min/2);
+> SRu_nGM_dB = 20*log10(SRu_nGM);
+> SRu_pGM_dB = 20*log10(SRu_pGM);
+> SRu_Pha_deg = 180*SRu_Pha/pi ;
+> disp('SRu_nGM SRu_pGM SRu_Pha')
+> disp([num2str(SRu_nGM) ' ' num2str(SRu_pGM) ' ' num2str(SRu_Pha)])
+> disp([num2str(SRu_nGM_dB) ' ' num2str(SRu_pGM_dB) ' ' num2str(SRu_Pha_deg)])
+> disp('  ')
+> 
+> margin(sys_u)
